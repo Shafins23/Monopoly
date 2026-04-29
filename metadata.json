@@ -1,0 +1,6 @@
+{
+  "name": "Monopoly Online",
+  "description": "Full-featured multiplayer Monopoly game with real-time sync via Firebase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

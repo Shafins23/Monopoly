@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    match /games/{roomId} {
+      allow read: if isSignedIn();
+      
+      // Creating a game
+      allow create: if isSignedIn() && isValidId(roomId);
+      
+      // Updating a game (joining, turns, status)
+      // For simplicity in this complex game, we allow authenticated updates.
+      // In a production app, we would strictly validate turnIndex and identity.
+      allow update: if isSignedIn();
+      
+      match /trades/{tradeId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn();
+        allow update: if isSignedIn();
+      }
+    }
+  }
+}

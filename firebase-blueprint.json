@@ -1,0 +1,65 @@
+{
+  "entities": {
+    "Game": {
+      "title": "Monopoly Game State",
+      "description": "Represents the full state of a Monopoly game session.",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["waiting", "playing", "finished"]
+        },
+        "hostId": { "type": "string" },
+        "players": {
+          "type": "array",
+          "description": "List of players in the game."
+        },
+        "board": {
+          "type": "array",
+          "description": "State of all 40 board spaces."
+        },
+        "turnIndex": { "type": "number" },
+        "dice": {
+          "type": "array",
+          "description": "Current dice values."
+        },
+        "lastRoll": { "type": "object" },
+        "chanceDeck": { "type": "array" },
+        "communityChestDeck": { "type": "array" },
+        "housesAvailable": { "type": "number" },
+        "hotelsAvailable": { "type": "number" },
+        "log": { "type": "array" },
+        "pot": { "type": "number", "description": "Free Parking pot." },
+        "settings": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["status", "hostId", "players", "board", "turnIndex", "createdAt", "updatedAt"]
+    },
+    "Trade": {
+      "title": "Trade Offer",
+      "description": "A pending trade between two players.",
+      "type": "object",
+      "properties": {
+        "fromId": { "type": "string" },
+        "toId": { "type": "string" },
+        "offerCash": { "type": "number" },
+        "offerProperties": { "type": "array" },
+        "requestCash": { "type": "number" },
+        "requestProperties": { "type": "array" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined"] }
+      },
+      "required": ["fromId", "toId", "offerCash", "offerProperties", "requestCash", "requestProperties", "status"]
+    }
+  },
+  "firestore": {
+    "/games/{roomId}": {
+      "schema": "Game",
+      "description": "The main game document."
+    },
+    "/games/{roomId}/trades/{tradeId}": {
+      "schema": "Trade",
+      "description": "Trade offers for a specific game."
+    }
+  }
+}
